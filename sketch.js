@@ -11,7 +11,7 @@
     Space Bar                     Attack
  
 */
-
+let runSound;
 let player;
 let playerImg;
 
@@ -36,21 +36,21 @@ const FRAME_W = 32,
 const GRAVITY = 0;
 
 function preload() {
-  // --- IMAGES ---
   playerImg = loadImage("assets/foxSpriteSheet.png");
+  runSound = loadSound("assets/run.mp3");
 }
 
 function setup() {
   // pixelated rendering with autoscaling
   new Canvas(VIEWW, VIEWH, "pixelated");
-  
+
   // needed to correct an visual artifacts from attempted antialiasing
   allSprites.pixelPerfect = true;
- 
+
   world.gravity.y = GRAVITY;
 
   // --- PLAYER ---
-  player = new Sprite(VIEWW/2, VIEWH/2, FRAME_W, FRAME_H); // create the player
+  player = new Sprite(VIEWW / 2, VIEWH / 2, FRAME_W, FRAME_H); // create the player
   player.spriteSheet = playerImg; // use the sprite sheet
   player.rotationLock = true; // turn off rotations (player shouldn't rotate)
 
@@ -74,16 +74,19 @@ function draw() {
   // --- PLAYER CONTROLS ---
   if (kb.presses("up")) {
     player.ani = "jump";
-  } else if (kb.presses("right")){  
+  } else if (kb.presses("right")) {
     player.ani = "run";
-    player.mirror.x = false;  
-  } else if (kb.presses("left")){  
+    player.mirror.x = false;
+    if (runSound) {
+      runSound.play();
+    }
+  } else if (kb.presses("left")) {
     player.ani = "run";
-    player.mirror.x = true;  
-  } else if (kb.presses(" ")){  
-    player.ani = "attack";  
-  } else if (kb.presses("down")){  
+    player.mirror.x = true;
+  } else if (kb.presses(" ")) {
+    player.ani = "attack";
+  } else if (kb.presses("down")) {
     // Grounded: idle or run
-    player.ani = "idle";  
+    player.ani = "idle";
   }
 }
